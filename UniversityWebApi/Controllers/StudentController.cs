@@ -15,19 +15,6 @@ namespace UniversityWebApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("ImportFromStudent")]
-        public async Task<IActionResult> ImportFromStudent()
-        {
-            var result = await _studentFeature.ImportFromStudent();
-
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(result);
-        }
-
         [HttpPost("ImportFromPlaceholder")]
         public async Task<IActionResult> ImportFromPlaceholder(PlaceholderImport import)
         {
