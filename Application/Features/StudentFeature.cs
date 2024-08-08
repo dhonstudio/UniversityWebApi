@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Domain.DTO;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 using Sieve.Models;
 using Sieve.Services;
 using System;
@@ -14,12 +15,17 @@ namespace Application.Features
     public class StudentFeature(IRepository<Student> _studentRepository,
         IPlaceholderUserRepository _placeholderUserRepository,
         IUnitOfWork _unitOfWork,
+        ILogger<StudentFeature> _logger,
         ISieveProcessor _sieveProcessor)
     {
         public async Task<List<Student>> GetAllStudent(SieveModel sieveModel)
         {
             var result = _studentRepository.GetAllSieveModel();
             var resultSieve = _sieveProcessor.Apply(sieveModel, result);
+
+            if (result != null) {
+                _logger.LogWarning("Berhasil");
+            }
 
             return resultSieve.ToList();
         }
