@@ -10,6 +10,7 @@ namespace Application
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<CourseFeature>();
             services.AddScoped<StudentFeature>();
+            services.AddScoped<TokenFeature>();
             return services;
         }
     }
