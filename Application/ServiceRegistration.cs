@@ -1,4 +1,5 @@
 ﻿using Application.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -11,6 +12,8 @@ namespace Application
             services.AddScoped<CourseFeature>();
             services.AddScoped<StudentFeature>();
             services.AddScoped<TokenFeature>();
+            services.AddScoped<PasswordFeature>();
+            services.AddScoped<IPasswordHasher<object>, PasswordHasher<object>>();
             return services;
         }
     }

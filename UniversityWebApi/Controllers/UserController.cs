@@ -8,7 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace UniversityWebApi.Controllers
 {
     [Route("api/[controller]")]
-    public class UserController(IMapper mapper, IRepository<Users> repository, IUnitOfWork unitOfWork) : Controller
+    public class UserController(
+        IMapper mapper, 
+        IRepository<Users> repository, 
+        IUnitOfWork unitOfWork,
+        PasswordFeature passwordFeature) : Controller
     {
         [HttpPost()]
         public async Task<IActionResult> Create(UsersParamDTO userParam)
@@ -19,6 +23,7 @@ namespace UniversityWebApi.Controllers
             {
                 Message = "username sudah pernah didaftarkan"
             });
+            user.Password = passwordFeature.HashPassword(userParam.Password, userParam);
 
             await repository.Add(user);
             await unitOfWork.SaveChanges();
