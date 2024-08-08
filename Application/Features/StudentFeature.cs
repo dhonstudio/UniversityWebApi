@@ -1,5 +1,7 @@
 ﻿using Application.Repositories;
 using Domain.Entities;
+using Sieve.Models;
+using Sieve.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +12,14 @@ namespace Application.Features
 {
     public class StudentFeature(IRepository<Student> _studentRepository,
         IPlaceholderUserRepository _placeholderUserRepository,
-        IUnitOfWork _unitOfWork)
+        IUnitOfWork _unitOfWork,
+        ISieveProcessor _sieveProcessor)
     {
-        public async Task<List<Student>> GetAllStudent()
+        public async Task<List<Student>> GetAllStudent(SieveModel sieveModel)
         {
-            return await _studentRepository.GetAll();
+            var result = _studentRepository.GetAllQueryable();
+            var resultSieve = _sieveProcessor.Apply(sieveModel, result, applyPagination: true);
+            return resultSieve.ToList();
         }
 
         public async Task<Student?> ImportFromPlaceholder(int idPlaceholderUser)

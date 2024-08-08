@@ -1,9 +1,11 @@
 ﻿using Domain.Common;
+using Sieve.Attributes;
 
 namespace Domain.Entities
 {
     public class Student : BaseEntity
     {
+        [Sieve(CanSort = true)]
         public int ID { get; set; }
         public string FirstMidName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

@@ -1,17 +1,19 @@
 ﻿using Application.DTO;
 using Application.Features;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
+using Sieve.Services;
 
 namespace UniversityWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController(StudentFeature _studentFeature) : ControllerBase
+    public class StudentController(StudentFeature _studentFeature, ISieveProcessor _sieveProcessor) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] SieveModel sieveModel)
         {
-            var result = await _studentFeature.GetAllStudent();
+            var result = await _studentFeature.GetAllStudent(sieveModel);
             return Ok(result);
         }
 

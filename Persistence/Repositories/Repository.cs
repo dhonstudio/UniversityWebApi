@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Domain.Common;
 using Microsoft.EntityFrameworkCore;
+using Sieve.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,13 @@ namespace Persistence.Repositories
                 .Set<T>()
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public IQueryable<T> GetAllQueryable()
+        {
+            return _schoolContext
+                .Set<T>()
+                .AsNoTracking();
         }
 
         public async Task<T?> GetById(object id)
