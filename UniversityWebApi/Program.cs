@@ -2,11 +2,14 @@ using Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Infra.Common;
 using Persistence;
 using RestClient;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseInfraLogging();
 
 // Add services to the container.
 
