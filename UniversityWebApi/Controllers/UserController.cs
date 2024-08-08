@@ -50,6 +50,7 @@ namespace UniversityWebApi.Controllers
             });
 
             var userRole = mapper.Map<UserRoles>(userRoleParam);
+            userRole.IDUser = userExist.FirstOrDefault().ID;
             await roleRepository.Add(userRole);
             await unitOfWork.SaveChanges();
 

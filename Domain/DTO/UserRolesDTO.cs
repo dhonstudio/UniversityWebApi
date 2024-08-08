@@ -9,16 +9,23 @@ namespace Domain.DTO
     public class UserRolesDTO
     {
         public string Username { get; set; }
-        public int IDRole { get; set; }
+        public RoleNameEnum IDRole { get; set; }
         public string RoleName { get
             {
                 return IDRole switch
                 {
-                    0 => "Pengguna",
-                    1 => "Administrator",
-                    2 => "Pengelola",
+                    RoleNameEnum.Pengguna => "Pengguna",
+                    RoleNameEnum.Administrator => "Administrator",
+                    RoleNameEnum.Pengelola => "Pengelola",
                 };
             }
         }
+    }
+
+    public enum RoleNameEnum
+    {
+        Pengguna,
+        Administrator,
+        Pengelola,
     }
 }
