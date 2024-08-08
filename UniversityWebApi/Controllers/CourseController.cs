@@ -33,6 +33,14 @@ namespace UniversityWebApi.Controllers
         [HttpGet("Search")]
         public async Task<IActionResult> SearchCourse(string title)
         {
+            var claim = User.Claims;
+            var roleid = Convert.ToInt32(claim.FirstOrDefault(x => x.Type == "roleid").Value);
+
+            if (roleid < 2) return BadRequest(new
+            {
+                Message = "Tidak memiliki akses"
+            });
+
             var result = await _courseFeature.FindByTitle(title);
             return Ok(result);
         }
