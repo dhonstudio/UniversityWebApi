@@ -11,29 +11,25 @@ namespace UniversityWebApi.Controllers
         TokenFeature tokenFeature, 
         IRepository<Users> repository, 
         PasswordFeature passwordFeature,
+        AuthFeature authFeature,
         IMapper mapper) : Controller
     {
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            var user = await repository.Get(x => x.Username == loginModel.Username);
-            if (user.FirstOrDefault() == null)
+            try
             {
-                return NotFound();
-            }
-
-            var userParam = mapper.Map<UsersParamDTO>(user.FirstOrDefault());
-            if (passwordFeature.VerifyPassword(user.FirstOrDefault().Password, loginModel.Password, userParam))
-            {
-                var token = tokenFeature.GenerateToken(loginModel.Username);
-
-                var finalToken = new
+                var token = await authFeature.CreateToken(loginModel);
+                if (token != null)
                 {
-                    Token = token
-                };
-                return Ok(finalToken);
+                    return Ok(token);
+                }
+
+                return Unauthorized();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
-            return Unauthorized();
         }
     }
 }

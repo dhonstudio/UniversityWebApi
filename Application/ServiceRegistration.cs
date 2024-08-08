@@ -13,6 +13,7 @@ namespace Application
             services.AddScoped<StudentFeature>();
             services.AddScoped<TokenFeature>();
             services.AddScoped<PasswordFeature>();
+            services.AddScoped<AuthFeature>();
             services.AddScoped<IPasswordHasher<object>, PasswordHasher<object>>();
             return services;
         }
