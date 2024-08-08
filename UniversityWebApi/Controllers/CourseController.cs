@@ -1,9 +1,11 @@
 ﻿using Application.Features;
 using Domain.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UniversityWebApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CourseController(CourseFeature _courseFeature) : ControllerBase
