@@ -36,6 +36,13 @@ namespace Persistence.Repositories
                 .ToListAsync();
         }
 
+        public IQueryable<T> GetAllSieveModel()
+        {
+            return _schoolContext
+                .Set<T>()
+                .AsNoTracking();
+        }
+
         public async Task<T?> GetById(object id)
         {
             return await _schoolContext

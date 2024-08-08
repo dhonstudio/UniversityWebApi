@@ -2,6 +2,7 @@
 using Application.Features;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
 
 namespace UniversityWebApi.Controllers
 {
@@ -9,11 +10,11 @@ namespace UniversityWebApi.Controllers
     [ApiController]
     public class StudentController(StudentFeature _studentFeature) : ControllerBase
     {
-        [Authorize]
+        //[Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] SieveModel sieveModel)
         {
-            var result = await _studentFeature.GetAllStudent();
+            var result = await _studentFeature.GetAllStudent(sieveModel);
             return Ok(result);
         }
 
