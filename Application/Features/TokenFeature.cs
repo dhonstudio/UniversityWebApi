@@ -19,7 +19,7 @@ namespace Application.Features
             var issuer = configuration["Jwt:Issuer"];
             var audience = configuration["Jwt:Audience"];
 
-            var roleid = userRole == null ? "0" : userRole.IDRole.ToString();
+            var roleid = userRole == null ? "0" : Convert.ToInt32(userRole.IDRole).ToString();
             var rolename = userRole == null ? "Pengguna" : userRole.RoleName.ToString();
 
             var claims = new[]
@@ -28,6 +28,7 @@ namespace Application.Features
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("roleid", roleid),
                 new Claim("rolename", rolename),
+                new Claim("username", username),
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

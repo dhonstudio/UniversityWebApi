@@ -12,6 +12,7 @@ namespace Application.Features
 {
     public class AuthFeature(
         IRepository<Users> repository, 
+        IRepository<UserRoles> roleRepository, 
         IMapper mapper, 
         PasswordFeature passwordFeature,
         TokenFeature tokenFeature)
@@ -36,6 +37,30 @@ namespace Application.Features
                 return finalToken;
             }
             return null;
+        }
+
+        public async Task<object?> ChangeRole(string username, int roleid)
+        {
+            var user = await repository.Get(x => x.Username == username);
+
+            var roleExist = await roleRepository.Get(x => x.IDUser == user.FirstOrDefault().ID);
+
+            if (!roleExist.Select(x => x.IDRole).ToList().Contains(roleid))
+            {
+                throw new Exception("Tidak memiliki Role ini");
+            }
+
+            var userRoleDto = new UserRolesDTO()
+            {
+                IDRole = (RoleNameEnum)roleid,
+            };
+            var token = tokenFeature.GenerateToken(username, userRoleDto);
+
+            var finalToken = new
+            {
+                Token = token
+            };
+            return finalToken;
         }
     }
 }
