@@ -11,6 +11,7 @@ namespace UniversityWebApi.Controllers
     public class UserController(
         IMapper mapper, 
         IRepository<Users> repository, 
+        IRepository<UserRoles> roleRepository, 
         IUnitOfWork unitOfWork,
         PasswordFeature passwordFeature) : Controller
     {
@@ -28,6 +29,31 @@ namespace UniversityWebApi.Controllers
             await repository.Add(user);
             await unitOfWork.SaveChanges();
             return Ok(mapper.Map<UsersDTO>(user));
+        }
+
+        [HttpPost("addRole")]
+        public async Task<IActionResult> AddRole(UserRoleParamDTO userRoleParam)
+        {
+            var userExist = await repository.Get(x => x.Username.Equals(userRoleParam.Username));
+
+            if (userExist.FirstOrDefault() == null) return BadRequest(new
+            {
+                Message = "User tidak ada"
+            });
+
+            var roleExist = await roleRepository.Get(x => x.IDUser == userExist.FirstOrDefault().ID 
+                && x.IDRole == userRoleParam.IDRole);
+
+            if (roleExist.FirstOrDefault() != null) return BadRequest(new
+            {
+                Message = "Role sudah pernah ditambahkan"
+            });
+
+            var userRole = mapper.Map<UserRoles>(userRoleParam);
+            await roleRepository.Add(userRole);
+            await unitOfWork.SaveChanges();
+
+            return Ok(mapper.Map<UserRolesDTO>(userRole));
         }
     }
 }
