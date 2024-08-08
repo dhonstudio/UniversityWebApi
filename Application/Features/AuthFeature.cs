@@ -2,6 +2,8 @@
 using AutoMapper;
 using Domain.DTO;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,7 @@ namespace Application.Features
         IRepository<Users> repository, 
         IRepository<UserRoles> roleRepository, 
         IMapper mapper, 
+        IConfiguration configuration,
         PasswordFeature passwordFeature,
         TokenFeature tokenFeature)
     {
@@ -61,6 +64,25 @@ namespace Application.Features
                 Token = token
             };
             return finalToken;
+        }
+
+        public async Task<object?> ValidatePublic(HttpRequest request)
+        {
+            var clientId = request.Headers.FirstOrDefault(x => x.Key.ToLower() == "clientid").Value;
+            var clientSecret = request.Headers.FirstOrDefault(x => x.Key.ToLower() == "clientsecret").Value;
+
+            if (clientId == configuration["PublicToken:ClientId"] && clientSecret == configuration["PublicToken:ClientSecret"])
+            {
+                var token = tokenFeature.GeneratePublicToken();
+
+                var finalToken = new
+                {
+                    Token = token
+                };
+                return finalToken;
+            }
+
+            throw new Exception("Tidak valid");
         }
     }
 }

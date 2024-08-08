@@ -35,6 +35,25 @@ namespace UniversityWebApi.Controllers
             }
         }
 
+        [HttpPost("publicLogin")]
+        public async Task<IActionResult> PublicLogin([FromHeader] string ClientId, [FromHeader] string ClientSecret)
+        {
+            try
+            {
+                var token = await authFeature.ValidatePublic(Request);
+                if (token != null)
+                {
+                    return Ok(token);
+                }
+
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [Authorize]
         [HttpPost("changeRole")]
         public async Task<IActionResult> ChangeRole([FromBody] UserRoleParamDTO roleParam)
