@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Features;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UniversityWebApi.Controllers
@@ -8,10 +9,24 @@ namespace UniversityWebApi.Controllers
     [ApiController]
     public class StudentController(StudentFeature _studentFeature) : ControllerBase
     {
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await _studentFeature.GetAllStudent();
+            return Ok(result);
+        }
+
+        [HttpGet("GetFromStudent")]
+        public async Task<IActionResult> GetFromStudent()
+        {
+            var result = await _studentFeature.GetFromStudent();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
             return Ok(result);
         }
 

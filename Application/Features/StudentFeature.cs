@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Domain.DTO;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,17 @@ namespace Application.Features
         public async Task<List<Student>> GetAllStudent()
         {
             return await _studentRepository.GetAll();
+        }
+
+        public async Task<List<Student>?> GetFromStudent()
+        {
+            var student = await _placeholderUserRepository.GetFromStudent();
+
+            if (student == null)
+            {
+                return null;
+            }
+            return student;
         }
 
         public async Task<Student?> ImportFromPlaceholder(int idPlaceholderUser)
