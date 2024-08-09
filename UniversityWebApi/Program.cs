@@ -6,10 +6,18 @@ using Infra.Common;
 using Persistence;
 using RestClient;
 using System.Text;
+using Elastic.CommonSchema;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseInfraLogging();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder => builder.WithOrigins("http://localhost:4200")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
 
 // Add services to the container.
 
@@ -77,6 +85,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowOrigin");
 
 app.UseAuthorization();
 
