@@ -31,7 +31,10 @@ namespace UniversityWebApi.Controllers
                 return Unauthorized();
             } catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new
+                {
+                    Message = ex.Message
+                });
             }
         }
 
